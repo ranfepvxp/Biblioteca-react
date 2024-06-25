@@ -11,6 +11,7 @@ import LibrosPrestados from './LibrosPrestados';
 import LibrosPrestadosButton from './LibrosPrestadosButton';
 import MainContext from './MainContext';
 import Navbar from './components/Navbar';
+import LibrosRegistrarButton from './forms/LibrosRegistrarButton';
 
 function App() {
 
@@ -30,13 +31,14 @@ const [componentState, setComponentState] = useState('start');
 
 
 <LibrosPrestadosButton librosPrestados={() => setComponentState('LibrosPrestados') } />
+<LibrosRegistrarButton registrarLibro={() => setComponentState('RegistrarLibro') } />
 
           {componentState === 'LibrosPrestados' && (
             <LibrosPrestados />
           )}
 
 
-          {componentState === 'registrar' && (
+          {componentState === 'RegistrarLibro' && (
              <RegistrarLibro/>
           )}          
 

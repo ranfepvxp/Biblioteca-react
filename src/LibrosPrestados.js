@@ -36,8 +36,10 @@ function LibrosPrestados()
 
       const devolverTodos = async(id) => {
         prestamosService.DevolverTodos().then(response=>{
+          console.log(response.data);
           if(response.data){
               setData([]);
+              Get();
           }
         });
       }
@@ -47,7 +49,7 @@ function LibrosPrestados()
       },[])
         return (
             <div className='row'>
-              <button className="btn btn-warning"  onClick={()=> prestamosService.DevolverTodos() } > Devolver Todos </button> 
+              <button className="btn btn-warning"  onClick={()=> devolverTodos() } > Devolver Todos </button> 
               
       {data.map(libro=>(
 
