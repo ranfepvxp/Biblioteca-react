@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import MainContext from '../MainContext';
 import LoginService from '../services/LoginService';
+import Validaciones from '../utils/Validaciones';
 
 function Login() {
 
@@ -18,16 +19,33 @@ function Login() {
   });
 
   const handleChange = e=>{
-    if(e.target?.name=="email"){
-      validateEmail(e);
-    }
 
+    if(Validaciones.isEmpty(e))
+      {
+        setRespuesta("Llena todos los datos");
+      }
+      else
+      {
+        setRespuesta("");
+      }
+
+
+    if(e.target?.name=="email"){
+      if(Validaciones.validateEmail(e))
+      {
+        setRespuesta("");
+      }
+      else
+      {
+        setRespuesta("Email invalido");
+      }          
+    }
+   
       const {name, value} = e.target;
       setData({
         ...usuario,
         [name]:value
       })
-
 
   }
   
@@ -50,19 +68,6 @@ function Login() {
       })
   }
 
-  const isValidEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
-
-const validateEmail = (e) => {
-  if(e.target?.value && e.target.value.match(isValidEmail)){
-      console.log("valido...");
-      setRespuesta("");
-      return true;
-  }else{
-    console.log("no valido ");
-    setRespuesta("Email invalido");
-      return false;
-  }
-}
 
   return (
     <div>
@@ -74,8 +79,8 @@ const validateEmail = (e) => {
       <div className='row'>
       <div className='col-6'>
         <h1>Inicia Sesion</h1>
-        <input className='form-control mb-3' name='email' type='text' placeholder='Email (logen@hotmail.com)' onChange={handleChange} />
-        <input className='form-control mb-1' name='contraseña' type='password' placeholder='Contraseña (123)'  onChange={handleChange}  />
+        <input className='form-control mb-3' name='email' type='text' placeholder='Email (logen@hotmail.com)' onChange={handleChange} onBlur={handleChange} />
+        <input className='form-control mb-1' name='contraseña' type='password' placeholder='Contraseña (123)'  onChange={handleChange}  onBlur={handleChange} />
         <div className='mb-2 text-danger'>{respuesta}</div>
         <input className='btn btn-primary' type='button' onClick={()=>usuariosPost()} value={'Login'} />
        </div>
