@@ -1,19 +1,18 @@
 import React, { useState,useEffect,useContext } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css'
-import PrestamosService from './services/PrestamosService';
-import LibrosService from './services/LibrosService';
+import PrestamosService from '../services/PrestamosService';
+import LibrosService from '../services/LibrosService';
 import { format } from 'date-fns';
-import MainContext from './MainContext';
+import MainContext from '../MainContext';
 
 function LibrosPrestados()
 {    
     
-    const {componentState,setComponentState} = useContext(MainContext);
+    const {setComponentState} = useContext(MainContext);
     const [data,setData] = useState([]);
 
     const prestamosService = PrestamosService;
     const imgURL = LibrosService.PortadasURL();
-
 
     const Get = async() => {
         await prestamosService.GetLibrosPrestados()
@@ -38,8 +37,7 @@ function LibrosPrestados()
         prestamosService.DevolverTodos().then(response=>{
           console.log(response.data);
           if(response.data){
-              setData([]);
-              Get();
+              setComponentState('Inicio');
           }
         });
       }
@@ -48,9 +46,15 @@ function LibrosPrestados()
         Get();
       },[])
         return (
+            <div>
             <div className='row'>
-              <button className="btn btn-warning"  onClick={()=> devolverTodos() } > Devolver Todos </button> 
-              
+            <div className='col-6'>
+            <button className="btn btn-primary mb-3"  onClick={()=> setComponentState('Inicio') } > Regresar </button>   
+            <button className="btn btn-warning mb-3"  onClick={()=> devolverTodos() } > Devolver Todos </button>   
+            </div>
+            
+            </div>
+            <div className='row'>   
       {data.map(libro=>(
 
           <div className='col'>
@@ -64,7 +68,8 @@ function LibrosPrestados()
             </div>
           </div>
       ))}
-      </div>
+          </div>
+          </div>
         );
 
 

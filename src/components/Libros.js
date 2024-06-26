@@ -1,12 +1,14 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect,useContext } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css'
-import axios from 'axios';
-import { Modal,ModalBody,ModalFooter,ModalHeader } from 'reactstrap';
-import  LibrosService  from './services/LibrosService';
-import PrestamosService from './services/PrestamosService';
+import { Modal,ModalBody,ModalFooter } from 'reactstrap';
+import  LibrosService  from '../services/LibrosService';
+import PrestamosService from '../services/PrestamosService';
+import MainContext from '../MainContext';
 
 function Libros() {
 
+  
+  const {user} = useContext(MainContext);
   const service = LibrosService;
   const prestamosService = PrestamosService;
   const [data,setData] = useState([]);
@@ -49,8 +51,7 @@ function Libros() {
     
   const Delete = async()=>
     {
-        await service.Delete(libroSeleccionado).
-        then(response=>{
+        await service.Delete(libroSeleccionado).then(response=>{
           if(response.data){
             setData(data.filter(libro=>libro.id!==libroSeleccionado.id ));
           }      
@@ -99,8 +100,7 @@ function Libros() {
 
 
 
-    <div className='container'>
-    <div className='row'>
+   
       {data.map(libro=>(
         
           <div className='col'>
@@ -110,18 +110,18 @@ function Libros() {
               <h5 className="card-title"> {libro.nombre}</h5>
               <p className="card-text"> {libro.autor} | {libro.editorial} | {libro.año}</p>
               <p className="card-text"> Cantidad Disponible: {libro.cantidadDisponible}</p>
-              
+
+             {user!==null ?    
+              <div>
               { libro.cantidadDisponible>0 && <button className="btn btn-primary"  onClick={()=>seleccionarLibro(libro, "Prestar")} >Prestar </button> }
               <button className="btn btn-danger"  onClick={()=>seleccionarLibro(libro, "Eliminar")}>Eliminar</button>
-            
+             </div>
+             : ''}
             
             </div>
             </div>
           </div>
       ))}
-      </div>
-      </div>
-
 
       <Modal isOpen={modalEliminar}>
         <ModalBody>
