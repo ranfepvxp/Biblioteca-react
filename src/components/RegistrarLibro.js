@@ -6,6 +6,8 @@ import MainContext from '../MainContext';
 
 function RegistrarLibro()
 {
+    const msg = "Completa los datos";
+    const [respuesta,setRespuesta] = useState(msg);
     const {setComponentState} = useContext(MainContext);
     const [selectedFile] = useState(null);
    
@@ -20,13 +22,26 @@ function RegistrarLibro()
     });
 
     const librosPost = async() => {
+
+      if(respuesta != msg)
+      {
         delete libro.id;
         LibrosService.Post(libro)
         .then(response=>{
-          setComponentState('start');
+          console.log(response);
+          if(response.data!=null){
+          setComponentState('Inicio');
+          }
+          else
+          {
+          setRespuesta('Ocurrio un problema');
+          }
         }).catch(error=> {
+          setRespuesta('Ocurrio un problema');
           console.log(error); 
         })
+      }
+
     }
 
     const handleImgInput = (files) => {
@@ -43,10 +58,21 @@ function RegistrarLibro()
   
     const handleChange = e=>{
         const {name, value} = e.target;
+
+        if(value=="")
+        {
+          setRespuesta(msg);
+        }
+        else
+        {
+          setRespuesta("");
+        }
+
         setLibro ({
         ...libro,
         [name]:value
       })
+
     }
 
     
@@ -65,7 +91,8 @@ function RegistrarLibro()
       </label>
       <input className='form-control mb-3' id="img" name='imagen-file' type='file' value={selectedFile} onChange={e=>handleImgInput(e.target.files)} />
       <input className='form-control mb-3' name='imagen' type='hidden' placeholder='Año'  onChange={handleChange}  />
-      <input className='form-control mb-3' name='cantidadDisponible' type='text' placeholder='Cantidad'  onChange={handleChange}  />
+      <input className='form-control mb-1' name='cantidadDisponible' type='text' placeholder='Cantidad'  onChange={handleChange}  />
+      <div className='mb-2 text-danger'>{respuesta}</div>
       <input className='btn btn-primary' type='button' onClick={()=> librosPost() } value={'Registrar'} />
       
     </div>

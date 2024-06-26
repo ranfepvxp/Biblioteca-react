@@ -103,7 +103,7 @@ function Libros() {
    
       {data.map(libro=>(
         
-          <div className='col'>
+          <div className='col mb-3'>
             <div key={libro.id} className='card' style={{width: '18rem'}}>
             <img className="card-img-top" src={service.PortadasURL()+libro.imagen} />
             <div className="card-body">

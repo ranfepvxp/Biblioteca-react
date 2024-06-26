@@ -6,9 +6,7 @@ import LoginService from '../services/LoginService';
 
 function Login() {
 
-
   const {setUser,setComponentState} = useContext(MainContext);
-
   const [respuesta,setRespuesta] = useState('');
 
   const [usuario,setData] = useState({
@@ -19,15 +17,19 @@ function Login() {
     tipo: 0
   });
 
-
   const handleChange = e=>{
+    if(e.target?.name=="email"){
+      validateEmail(e);
+    }
+
       const {name, value} = e.target;
       setData({
         ...usuario,
         [name]:value
       })
+
+
   }
-  
   
   const usuariosPost = async() => {
     delete usuario.id;
@@ -48,11 +50,25 @@ function Login() {
       })
   }
 
+  const isValidEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+
+const validateEmail = (e) => {
+  if(e.target?.value && e.target.value.match(isValidEmail)){
+      console.log("valido...");
+      setRespuesta("");
+      return true;
+  }else{
+    console.log("no valido ");
+    setRespuesta("Email invalido");
+      return false;
+  }
+}
+
   return (
     <div>
       <div className='row'>
         <div className='col-1 mb-3'>
-        <button className='btn btn-sm btn-primary' onClick={()=>{setComponentState('Inicio')}} > Regresar</button>
+          <button className='btn btn-sm btn-primary' onClick={()=>{setComponentState('Inicio')}} > Regresar</button>
         </div>
       </div>
       <div className='row'>
